@@ -1,0 +1,89 @@
+/* Default bb palette (no overrides) plus layout tweaks. */
+
+/* Hide the sidebar's top "New thread" button; each group's "New thread in …" action covers it.
+   Collapse its row too when the button is the row's only content, so no blank gap remains. */
+[data-sidebar-header-slot] {
+  display: none;
+}
+:has(> [data-sidebar-header-slot]:only-child) {
+  display: none;
+}
+
+/* Hide the collapse chevron on expanded sidebar section headers (pinned, threads, projects,
+   custom sections, machines). A section that is somehow collapsed keeps its chevron, so it can
+   always be reopened, after which the chevron disappears again. */
+button[aria-expanded="true"][aria-label^="Collapse "][aria-label$=" section"] {
+  display: none;
+}
+
+/* Section heading labels: bb renders them at text-xs (0.75rem), below the thread titles
+   (0.8125rem). Bump them to a bit above the rows; on touch phones bb grows the rows, so follow
+   suit there. bb fixes the line height at 1.25rem (leading-5), too short for the bigger text, so
+   make it relative. Divider sections override the size below. */
+[data-sidebar-section-id] > [data-sidebar-sticky-tier="label"] {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  /* Size alone barely separates headings from rows, so also use full-strength ink (bb uses a
+     75% muted gray) and medium weight. Not semibold: unread thread titles are 650, and headings
+     that heavy read like unread threads. */
+  color: var(--sidebar-foreground);
+  font-weight: 500;
+}
+@media (width < 48rem) and (pointer: coarse) {
+  [data-sidebar-section-id] > [data-sidebar-sticky-tier="label"] {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Divider sections: a custom section whose name starts with "- " (e.g. "- work") renders as a
+   small uppercase label followed by a hairline, with its (empty) body hidden. Being a real
+   section, it drags to reorder like any other, so dividers can group the sections below them.
+   Matches on the label's title attribute, which bb sets to the section name. */
+[data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "])
+  > [data-sidebar-sticky-tier="label"] {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--subtle-foreground);
+  font-weight: 600;
+}
+/* Extra space above each divider (except at the very top) so its group reads as a block. */
+[data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "]) {
+  margin-top: 1rem;
+}
+.space-y-4 > :first-child [data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "]) {
+  margin-top: 0;
+}
+@media (width < 48rem) and (pointer: coarse) {
+  [data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "])
+    > [data-sidebar-sticky-tier="label"] {
+    font-size: 0.9375rem;
+  }
+}
+[data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "])
+  > [data-sidebar-sticky-tier="label"]
+  > span:first-child::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  margin-left: 0.375rem;
+  background: currentColor;
+  opacity: 0.6;
+}
+[data-sidebar-section-id]:has(> [data-sidebar-sticky-tier="label"] span[title^="- "])
+  > :not([data-sidebar-sticky-tier="label"]) {
+  display: none;
+}
+
+/* Tighten the gap between sidebar sections. bb's section list uses space-y-4 (1rem), and each
+   section sits inside a wrapper div, so target the list's direct children. Don't go below 0.5rem:
+   each sticky label paints a 0.5rem background shield above itself (for when it's stuck), and a
+   smaller gap lets that shield cover the descenders of the label above. */
+.space-y-4:has(> * [data-sidebar-section-id]) > :not(:last-child) {
+  margin-block-end: 0.5rem;
+}
+
+/* Indent each section's threads under its heading so rows read as children of the section. */
+[data-sidebar-section-id] > :not([data-sidebar-sticky-tier="label"]) {
+  padding-left: 0.75rem;
+}

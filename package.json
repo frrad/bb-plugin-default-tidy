@@ -1,0 +1,40 @@
+{
+  "name": "bb-plugin-default-tidy",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "bb": ">=0.48",
+    "bbPluginSdk": ">=0.6.94"
+  },
+  "bb": {
+    "name": "Default Tidy",
+    "description": "The default BB palette with a tidier sidebar layout.",
+    "branding": {
+      "icon": "Palette"
+    },
+    "server": "./server.ts",
+    "themes": [
+      {
+        "id": "default-tidy",
+        "name": "Default Tidy",
+        "description": "The default BB palette with a tidier sidebar layout.",
+        "css": "./themes/default-tidy/theme.css"
+      }
+    ],
+    "skills": []
+  },
+  "devDependencies": {
+    "@get-bb/plugin-sdk": "0.6.94",
+    "typescript": "^5.7.0"
+  },
+  "description": "The default BB palette with a tidier sidebar layout.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frrad/bb-plugin-default-tidy.git"
+  },
+  "scripts": {
+    "build": "bb plugin build",
+    "typecheck": "tsc --noEmit"
+  }
+}
